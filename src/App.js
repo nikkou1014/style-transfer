@@ -1,13 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import SignIn from './signin';
+import ImgPicker from './img-picker'
 
 function App() {
-  const style = {
-    padding: '40px',
-    textAlign: 'center',
-  }
-
-  return <div style={style}>Welcome to React!</div>
+    return (
+        <ImgPicker />
+    );
 }
 
 ReactDOM.render(<App />, document.querySelector('#app'))

@@ -14,7 +14,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', function (req, res, next) {
+app.get('/', function (req, res, next) {
+    res.render('index');
+});
+
+app.post('/api/transfer', function (req, res, next) {
+    console.log(req);
     res.render('index');
 });
 
