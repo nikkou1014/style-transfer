@@ -3,6 +3,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var app = express();
+var upload = require('multer')();
+var transfer = require('./transfer');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,9 +20,9 @@ app.get('/', function (req, res, next) {
     res.render('index');
 });
 
-app.post('/api/transfer', function (req, res, next) {
-    console.log(req);
-    res.render('index');
+app.post('/api/transfer', upload.single('s_img'), function (req, res, next) {
+    // console.log(req.file.buffer.toString('base64'), "\n\n\n");
+    transfer.style_img(req.file, res, next);
 });
 
 app.use(function (req, res, next) {
@@ -28,9 +30,9 @@ app.use(function (req, res, next) {
     res.render("404");
 });
 
-app.use(function (err, req, res, next) {
-    res.status(500);
-    res.render("error", { error: err });
-});
+// app.use(function (err, req, res, next) {
+//     res.status(500);
+//     res.render("error", { error: err });
+// });
 
 module.exports = app;

@@ -1,40 +1,39 @@
 import axios from 'axios';
-
 import React, { Component, useState } from 'react';
 
 export default function ImgPicker(props) {
-    let [file, setFile] = useState(null);
+    let [source, setSource] = useState(null);
+    let [rst, setRst] = useState(null);
 
     let onFileSelected = event => {
-        setFile(event.target.files[0]);
-
-        // Details of the uploaded file
-        console.log(event.target.files[0]);
+        setSource(event.target.files[0]);
     };
 
     let onUpload = () => {
         const formData = new FormData();
 
-        // Update the formData object
-        formData.append(
-            "myFile",
-            file,
-            file.name
-        );
+        formData.append("s_img", source, source.name);
 
-        axios.post("api/transfer", formData);
+        axios.post("api/transfer", formData)
+            .then(function (response) {
+                console.log(response.data);
+                setRst(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
-    let fileInfo = () => {
-        if (file) {
+    let img_panel = (img) => {
+        if (img) {
             return (
                 <div>
                     <h2>File Details:</h2>
 
-                    <p>File Name: {file.name}</p>
-                    <p>File Type: {file.type}</p>
+                    <p>File Name: {img.name}</p>
+                    <p>File Type: {img.type}</p>
 
-                    <img src={URL.createObjectURL(file)} />
+                    <img src={URL.createObjectURL(img)} maxWidth="600" />
                 </div>
             );
         }
@@ -42,7 +41,27 @@ export default function ImgPicker(props) {
             return (
                 <div>
                     <br />
-                    <h4>Choose the source image first</h4>
+                    <h4>No image</h4>
+                </div>
+            );
+        }
+    };
+
+    let rst_panel = (img) => {
+        if (img) {
+            return (
+                <div>
+                    <h2>transformed image:</h2>
+
+                    <img src={img} maxWidth="600" />
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <br />
+                    <h4>No image</h4>
                 </div>
             );
         }
@@ -62,7 +81,8 @@ export default function ImgPicker(props) {
                     Upload!
 			    </button>
             </div>
-            {fileInfo()}
+            {img_panel(source)}
+            {rst_panel(rst)}
         </div>
     );
 }
