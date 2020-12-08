@@ -4,7 +4,7 @@ var Jimp = require('jimp');
 let model = null;
 
 async function load_model() {
-    model = await tf.loadGraphModel(tf.io.fileSystem('./saved_model_style_js/model.json'));
+    model = await tf.loadGraphModel(tf.io.fileSystem('./encoder/model.json'));
 }
 
 load_model();
@@ -22,7 +22,7 @@ let tensor2base64 = async (tensor, res) => {
 
                 buffer[offset * 4] = arr[offset * 3];    // R
                 buffer[offset * 4 + 1] = arr[offset * 3 + 1];    // G
-                buffer[offset * 4 + 2] = arr[offset * 3 + 1];;    // B
+                buffer[offset * 4 + 2] = arr[offset * 3 + 2];;    // B
                 buffer[offset * 4 + 3] = 255  // Alpha
             }
         }
@@ -35,12 +35,15 @@ let tensor2base64 = async (tensor, res) => {
 };
 
 function style_img(file, res, next) {
-    const input = tf.node.decodeImage(file.buffer, 3) //.toFloat().div(tf.scalar(255));
-    // console.log(input.shape, input.dataSync());
+    const input = tf.node.decodeImage(file.buffer, 3).toFloat().div(tf.scalar(255));
 
-    //const styled_img = model.predict(input.expandDims()).mul(tf.scalar(255)).toInt();
+    console.log("start transfer", input.shape);
 
-    const styled_img = tensor2base64(input, res);
+    const styled_tensor = model.predict(input.expandDims()).toInt();
+
+    console.log("start transfer", styled_tensor.shape);
+
+    tensor2base64(styled_tensor.squeeze(axis = 0), res);
 }
 
 exports.style_img = style_img;
