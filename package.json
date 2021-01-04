@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon -w ./*.js ./bin/www",
-    "devpack": "webpack serve --mode development --env development",
-    "pack": "webpack  --mode production --env production"
+    "devpack": "webpack --mode development --env development",
+    "pack": "webpack --mode production --env production"
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0",
@@ -24,16 +24,23 @@
     "morgan": "~1.10.0",
     "multer": "^1.4.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-loading-overlay": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
     "@babel/preset-react": "^7.13.13",
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "babel-loader": "^8.2.2",
+    "browser-sync": "^2.26.14",
+    "eslint": "^7.27.0",
+    "eslint-plugin-react": "^7.24.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-middleware": "^5.0.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-hot-middleware": "^2.25.0"
   }
 }

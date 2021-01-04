@@ -27,7 +27,7 @@ let tensor2base64 = async (tensor, res) => {
             }
         }
 
-        image.getBase64(Jimp.MIME_PNG, function (err, rst) {
+        image.getBase64(Jimp.MIME_JPEG, function (err, rst) {
             // console.log(rst);
             res.send(rst);
         });
@@ -35,13 +35,25 @@ let tensor2base64 = async (tensor, res) => {
 };
 
 function style_img(file, res, next) {
-    const input = tf.node.decodeImage(file.buffer, 3).toFloat().div(tf.scalar(255));
+    let input = tf.node.decodeImage(file.buffer, 3);
+
+    // limit max size to max_size
+    const max_size = 1280;
+    let [height, width, channels] = input.shape;
+    if (height > max_size) {
+        input = input.resizeBilinear([max_size, width * max_size / height]);
+    }
+
+    [height, width, channels] = input.shape;
+    if (width > max_size) {
+        input = input.resizeBilinear([height * max_size / width, max_size]);
+    }
 
     console.log("start transfer", input.shape);
 
-    const styled_tensor = model.predict(input.expandDims()).toInt();
+    const styled_tensor = model.predict(input.toFloat().expandDims()).toInt();
 
-    console.log("start transfer", styled_tensor.shape);
+    console.log("finished transfer", styled_tensor.shape);
 
     tensor2base64(styled_tensor.squeeze(axis = 0), res);
 }

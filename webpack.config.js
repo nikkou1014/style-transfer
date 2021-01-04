@@ -4,7 +4,7 @@ module.exports = env => {
     return {
         mode: env,
         watch: true,
-        entry: './src/app.js',
+        entry: './src/App.jsx',
         output: {
             path: path.resolve(__dirname, 'public'),
             filename: './js/main.js',
@@ -12,7 +12,7 @@ module.exports = env => {
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.jsx?$/,
                     exclude: /node_modules/,
                     use: [
                         {
