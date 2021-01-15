@@ -9,6 +9,20 @@ import Typography from '@material-ui/core/Typography';
 
 import Form from './Form.jsx';
 
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary" align="center" justify="flex-end">
+            {'Copyright © '}
+            <Link color="inherit" href="https://github.com/nikkou1014">
+                Tianyu Jiang
+            </Link>
+            {' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
 const useStyles = makeStyles((theme) => ({
     bar: {
         padding: theme.spacing(3),
@@ -36,6 +50,10 @@ function App() {
             </AppBar>
             <Form>
             </Form>
+
+            <Box mt={2}>
+                <Copyright />
+            </Box>
         </div>
     );
 }

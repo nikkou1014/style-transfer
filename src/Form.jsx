@@ -47,23 +47,9 @@ const StyledButtonBlue = withStyles({
     },
 })(Button);
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center" justify="flex-end">
-            {'Copyright © '}
-            <Link color="inherit" href="https://github.com/nikkou1014">
-                Tianyu Jiang
-            </Link>
-            {' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
 const useStyles = makeStyles((theme) => ({
     main: {
-        maxWidth: '80%',
+        maxWidth: '85%',
         marginTop: theme.spacing(1)
     },
     space: {
@@ -170,10 +156,6 @@ export default function Form(props) {
                 </Grid>
 
             </Grid>
-
-            <Box mt={2}>
-                <Copyright />
-            </Box>
 
             <Snackbar open={open} autoHideDuration={2500} color="secondary"
                 anchorOrigin={{
