@@ -1,5 +1,5 @@
 const tf = require('@tensorflow/tfjs-node');
-var Jimp = require('jimp');
+let Jimp = require('jimp');
 
 let model = null;
 
@@ -9,11 +9,11 @@ async function load_model() {
 
 load_model();
 
-let tensor2base64 = async (tensor, res) => {
+let tensor2base64 = async (tensor, callback) => {
     const [height, width, channels] = tensor.shape;
     const arr = tensor.dataSync();
 
-    var image = new Jimp(width, height, function (err, image) {
+    new Jimp(width, height, function (err, image) {
         let buffer = image.bitmap.data;
 
         for (let x = 0; x < width; x++) {
@@ -27,9 +27,8 @@ let tensor2base64 = async (tensor, res) => {
             }
         }
 
-        image.getBase64(Jimp.MIME_JPEG, function (err, rst) {
-            // console.log(rst);
-            res.send(rst);
+        image.quality(95).getBase64(Jimp.MIME_JPEG, function (err, rst) {
+            callback(err, rst);
         });
     });
 };
@@ -44,7 +43,7 @@ function style_img(file, res, next) {
         input = input.resizeBilinear([max_size, width * max_size / height]);
     }
 
-    [height, width, channels] = input.shape;
+    [height, width, channels] = input.shape; // update shape
     if (width > max_size) {
         input = input.resizeBilinear([height * max_size / width, max_size]);
     }
@@ -55,7 +54,12 @@ function style_img(file, res, next) {
 
     console.log("finished transfer", styled_tensor.shape);
 
-    tensor2base64(styled_tensor.squeeze(axis = 0), res);
+    tensor2base64(styled_tensor.squeeze(axis = 0), function (err, rst) {
+        res.send(rst);
+
+        delete input;
+        input = undefined;
+    });
 }
 
 exports.style_img = style_img;

@@ -21,7 +21,7 @@ app.get('/', function (req, res, next) {
 });
 
 app.post('/api/transfer', upload.single('s_img'), function (req, res, next) {
-    // console.log(req.file.buffer.toString('base64'), "\n\n\n");
+    console.log(req.file.buffer);
     transfer.style_img(req.file, res, next);
 });
 

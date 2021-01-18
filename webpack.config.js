@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = env => {
     return {
@@ -49,6 +51,17 @@ module.exports = env => {
                     ],
                 }
             ],
+        },
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.browser': 'true'
+            }),
+            // new NodePolyfillPlugin(),
+        ],
+        resolve: {
+            fallback: {
+                "fs": false
+            },
         }
     }
 }

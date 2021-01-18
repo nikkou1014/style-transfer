@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon -w ./*.js ./bin/www",
+    "proxy": "browser-sync start --proxy localhost:3000 --files 'public/**'",
     "devpack": "webpack --mode development --env development",
     "pack": "webpack --mode production --env production"
   },
@@ -37,6 +38,7 @@
     "browser-sync": "^2.26.14",
     "eslint": "^7.27.0",
     "eslint-plugin-react": "^7.24.0",
+    "node-polyfill-webpack-plugin": "^1.1.2",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0",
     "webpack-dev-middleware": "^5.0.0",

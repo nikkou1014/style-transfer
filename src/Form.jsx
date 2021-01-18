@@ -1,19 +1,17 @@
 import axios from 'axios';
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { sizing, spacing, display } from '@material-ui/system';
 import { createMuiTheme, withStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
-import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
+
 import LoadingOverlay from 'react-loading-overlay';
 
 function Alert(props) {
@@ -81,7 +79,9 @@ export default function Form(props) {
     let [source, setSource] = useState("https://raw.githubusercontent.com/nikkou1014/nikkou1014.github.io/main/raw.jpg");
     let [rst, setRst] = useState("https://raw.githubusercontent.com/nikkou1014/nikkou1014.github.io/main/style.jpg");
     let [loading, setLoading] = useState(false);
-    const [open, setOpen] = React.useState(false);
+
+    let [open, setOpen] = React.useState(false);
+    let [failed, setFailed] = React.useState(false);
 
     let onFileSelected = event => {
         setSource(URL.createObjectURL(event.target.files[0]));
@@ -109,19 +109,19 @@ export default function Form(props) {
             formData.append("s_img", source, source.name);
         }
 
-        // console.log(formData);
-
-        axios.post("api/transfer", formData)
+        axios.post("api/transfer", formData, { timeout: 25000 })
             .then(function (response) {
                 // console.log(response.data);
                 setRst(response.data);
 
                 setLoading(false);
                 setOpen(true);
-                setTimeout(() => { setOpen(false); }, 2500);
             })
             .catch(function (error) {
                 console.log(error);
+
+                setLoading(false);
+                setFailed(true);
             });
     };
 
@@ -157,17 +157,22 @@ export default function Form(props) {
 
             </Grid>
 
-            <Snackbar open={open} autoHideDuration={2500} color="secondary"
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                message="Transfer finished!"
-                action={
-                    <IconButton size="small" aria-label="close" color="inherit" onClick={() => { setOpen(false) }}>
-                        <CloseIcon fontSize="small" />
-                    </IconButton>
-                }>
+            <Snackbar open={open} autoHideDuration={4000} onClose={() => { setOpen(false) }} anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+            }}>
+                <Alert onClose={() => { setOpen(false) }} severity="success">
+                    Transfer finished!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={failed} autoHideDuration={10000} onClose={() => { setFailed(false) }} anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+            }}>
+                <Alert onClose={() => { setFailed(false) }} severity="error">
+                    Error: Transfer failed! Please try again.
+                </Alert>
             </Snackbar>
         </Container>
     );

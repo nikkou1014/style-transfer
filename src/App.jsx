@@ -6,6 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 
 import Form from './Form.jsx';
 
@@ -42,7 +43,7 @@ function App() {
             <AppBar position="static" className={classes.bar}>
                 <Grid item xs="12">
                     <Box>
-                        <Typography margin="auto" display="inline" color="info" variant="h4">
+                        <Typography margin="auto" color="info" variant="h4">
                             Transfer any photo into Chinese Ink paint style.
                         </Typography>
                     </Box>
