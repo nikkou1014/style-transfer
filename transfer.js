@@ -57,8 +57,7 @@ function style_img(file, res, next) {
     tensor2base64(styled_tensor.squeeze(axis = 0), function (err, rst) {
         res.send(rst);
 
-        delete input;
-        input = undefined;
+        tf.disposeVariables();
     });
 }
 

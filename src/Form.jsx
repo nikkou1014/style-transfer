@@ -15,6 +15,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 
+import LinearProgress from '@material-ui/core/LinearProgress';
 import LoadingOverlay from 'react-loading-overlay';
 
 function Alert(props) {
@@ -90,6 +91,7 @@ export default function Form(props) {
 
     let [open, setOpen] = React.useState(false);
     let [failed, setFailed] = React.useState(false);
+    let [progress, setProgress] = React.useState(0);
 
     let onSourceSelected = event => {
         setSource(event.target.value);
@@ -106,6 +108,15 @@ export default function Form(props) {
     let onUpload = async function () {
         setOpen(false);
         setLoading(true);
+
+        setProgress(1);
+        let Progress_adder = function () {
+            if (progress > 0 && progress < 99) {
+                setProgress(progress + 1);
+            }
+            setTimeout(Progress_adder, 0.1);
+        }
+        setTimeout(Progress_adder, 0.1);
 
         setTimeout(() => {
             setRst(source);
@@ -127,6 +138,8 @@ export default function Form(props) {
         axios.post("api/transfer", formData, { timeout: 25000 })
             .then(function (response) {
                 // console.log(response.data);
+                setProgress(100);
+
                 setRst(response.data);
 
                 setLoading(false);
@@ -135,6 +148,7 @@ export default function Form(props) {
             .catch(function (error) {
                 console.log(error);
 
+                setProgress(0);
                 setLoading(false);
                 setFailed(true);
             });
@@ -148,7 +162,7 @@ export default function Form(props) {
                 <Grid item xs="3" alignContent="flex-end" display="flex">
                     <StyledButtonBlue variant="contained" component="label" color="primary" alignSelf="flex-end">
                         Select file to upload
-                            <input type="file" onChange={onFileSelected} hidden accept="image/*" />
+                        <input type="file" onChange={onFileSelected} hidden accept="image/*" />
                     </StyledButtonBlue>
                 </Grid>
 
@@ -183,9 +197,11 @@ export default function Form(props) {
 
                 <Grid item xs="6">
                     <LoadingOverlay active={loading} spinner
-                        text='Transfering... May take upto 30 seconds'>
+                        text='Transfering... May take upto 10 seconds'>
 
                         <img src={rst} className={classes.img} />
+
+                        <LinearProgress variant="determinate" value={progress} />
                     </LoadingOverlay>
                 </Grid>
 
