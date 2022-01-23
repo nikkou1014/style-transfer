@@ -22,6 +22,21 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+function AutoProgress(props) {
+    if (props.value > 0)
+        return (
+            <Grid container spacing={3}>
+                <Grid item xs="3">
+                    Progress:
+                </Grid>
+                <Grid item xs="9">
+                    <LinearProgress variant="determinate" value={props.value} />
+                </Grid>
+            </Grid>);
+
+    return null;
+}
+
 const StyledButton = withStyles({
     root: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
@@ -91,7 +106,21 @@ export default function Form(props) {
 
     let [open, setOpen] = React.useState(false);
     let [failed, setFailed] = React.useState(false);
-    let [progress, setProgress] = React.useState(0);
+    let [progress, setProgress] = React.useState(1);
+
+    React.useEffect(() => {
+        const timer = setInterval(() => {
+            setProgress((oldProgress) => {
+                if (oldProgress > 1 && oldProgress < 99) {
+                    setProgress(oldProgress + 1);
+                }
+            });
+        }, 100);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
 
     let onSourceSelected = event => {
         setSource(event.target.value);
@@ -109,14 +138,7 @@ export default function Form(props) {
         setOpen(false);
         setLoading(true);
 
-        setProgress(1);
-        let Progress_adder = function () {
-            if (progress > 0 && progress < 99) {
-                setProgress(progress + 1);
-            }
-            setTimeout(Progress_adder, 0.1);
-        }
-        setTimeout(Progress_adder, 0.1);
+        setProgress(5);
 
         setTimeout(() => {
             setRst(source);
@@ -149,6 +171,7 @@ export default function Form(props) {
                 console.log(error);
 
                 setProgress(0);
+
                 setLoading(false);
                 setFailed(true);
             });
@@ -200,11 +223,10 @@ export default function Form(props) {
                         text='Transfering... May take upto 10 seconds'>
 
                         <img src={rst} className={classes.img} />
-
-                        <LinearProgress variant="determinate" value={progress} />
                     </LoadingOverlay>
                 </Grid>
 
+                <AutoProgress value={progress} />
             </Grid>
 
             <Snackbar open={open} autoHideDuration={4000} onClose={() => { setOpen(false) }} anchorOrigin={{

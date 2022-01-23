@@ -26,7 +26,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
     bar: {
-        padding: theme.spacing(3),
+        padding: theme.spacing(2.5),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
     by: {
         margin: '2px',
+        marginBottom: '-5px',
         textAlign: 'end',
     }
 }));
