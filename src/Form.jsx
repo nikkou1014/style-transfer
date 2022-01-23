@@ -25,9 +25,9 @@ function Alert(props) {
 function AutoProgress(props) {
     if (props.value > 0)
         return (
-            <Grid container spacing={3}>
+            <Grid container spacing={3} justifyContent="center" alignItems="center">
                 <Grid item xs="3">
-                    Progress:
+                    <Button variant="text">Progress</Button>
                 </Grid>
                 <Grid item xs="9">
                     <LinearProgress variant="determinate" value={props.value} />
@@ -111,8 +111,11 @@ export default function Form(props) {
     React.useEffect(() => {
         const timer = setInterval(() => {
             setProgress((oldProgress) => {
-                if (oldProgress > 1 && oldProgress < 99) {
+                if (oldProgress > 1 && oldProgress < 90) {
                     setProgress(oldProgress + 1);
+                }
+                else if (oldProgress > 90 && oldProgress < 99) {
+                    setProgress(oldProgress + 0.1);
                 }
             });
         }, 100);
