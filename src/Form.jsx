@@ -7,10 +7,13 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { sizing, spacing, display } from '@material-ui/system';
+import { sizing, spacing, display, flexbox } from '@material-ui/system';
 import { createMuiTheme, withStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import LoadingOverlay from 'react-loading-overlay';
 
@@ -31,7 +34,6 @@ const StyledButton = withStyles({
     },
 })(Button);
 
-
 const StyledButtonBlue = withStyles({
     root: {
         background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
@@ -39,6 +41,7 @@ const StyledButtonBlue = withStyles({
         border: 0,
         color: 'white',
         boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+        alignSelf: 'flex-end'
     },
     label: {
         textTransform: 'capitalize',
@@ -50,11 +53,8 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '85%',
         marginTop: theme.spacing(1)
     },
-    space: {
-        marginTop: theme.spacing(3)
-    },
     box: {
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -70,21 +70,36 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         maxwidth: '100%',
         objectFit: 'cover'
+    },
+    xfull: {
+        width: '100%',
     }
 }));
 
 export default function Form(props) {
     const classes = useStyles();
 
-    let [source, setSource] = useState("https://raw.githubusercontent.com/nikkou1014/nikkou1014.github.io/main/raw.jpg");
+    const images = [
+        ["https://raw.githubusercontent.com/nikkou1014/nikkou1014.github.io/main/raw.jpg", "fuji"]
+    ];
+
+    let [selected, setSelected] = useState(images[0][0]);
+    let [source, setSource] = useState(images[0][0]);
     let [rst, setRst] = useState("https://raw.githubusercontent.com/nikkou1014/nikkou1014.github.io/main/style.jpg");
     let [loading, setLoading] = useState(false);
 
     let [open, setOpen] = React.useState(false);
     let [failed, setFailed] = React.useState(false);
 
+    let onSourceSelected = event => {
+        setSource(event.target.value);
+        setSelected(event.target.value);
+        setOpen(false);
+    };
+
     let onFileSelected = event => {
         setSource(URL.createObjectURL(event.target.files[0]));
+        setSelected('user');
         setOpen(false);
     };
 
@@ -130,29 +145,48 @@ export default function Form(props) {
             <CssBaseline />
 
             <Grid container spacing={3} className={classes.main}>
-                <Grid item xs="6">
-                    <StyledButtonBlue variant="contained" component="label" color="primary" p={1}>
-                        Select the file to upload
-                        <input type="file" onChange={onFileSelected} hidden accept="image/*" />
+                <Grid item xs="3" alignContent="flex-end" display="flex">
+                    <StyledButtonBlue variant="contained" component="label" color="primary" alignSelf="flex-end">
+                        Select file to upload
+                            <input type="file" onChange={onFileSelected} hidden accept="image/*" />
                     </StyledButtonBlue>
+                </Grid>
 
-                    <Box className={classes.space}>
-                        <img src={source} className={classes.img} />
-                    </Box>
+                <Grid item xs="3">
+                    <FormControl className={classes.xfull}>
+                        <InputLabel htmlFor="outlined-age-native-simple">Or using a pre-defined image</InputLabel>
+                        <Select native value={source} onChange={onSourceSelected} label="Input Image"
+                            inputProps={{
+                                name: 'Input Image',
+                                id: 'outlined-age-native-simple',
+                            }}
+                        >
+                            {
+                                images.map(function (item) {
+                                    return <option value={item[0]}>{item[1]}</option>
+                                })
+                            }
+                            <option value="user" disabled></option>
+                        </Select>
+                    </FormControl>
                 </Grid>
 
                 <Grid item xs="6">
-                    <StyledButton variant="contained" onClick={onUpload}>
+                    <StyledButton variant="contained" onClick={onUpload} alignSelf="flex-end">
                         Upload and Transfer!
                     </StyledButton>
+                </Grid>
 
-                    <Box className={classes.space}>
-                        <LoadingOverlay active={loading} spinner
-                            text='Transfering... May take upto 30 seconds'>
+                <Grid item xs="6">
+                    <img src={source} className={classes.img} />
+                </Grid>
 
-                            <img src={rst} className={classes.img} />
-                        </LoadingOverlay>
-                    </Box>
+                <Grid item xs="6">
+                    <LoadingOverlay active={loading} spinner
+                        text='Transfering... May take upto 30 seconds'>
+
+                        <img src={rst} className={classes.img} />
+                    </LoadingOverlay>
                 </Grid>
 
             </Grid>

@@ -32,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         color: 'white',
+    },
+
+    by: {
+        margin: '2px',
+        textAlign: 'end',
     }
 }));
 
@@ -44,11 +49,13 @@ function App() {
                 <Grid item xs="12">
                     <Box>
                         <Typography margin="auto" color="info" variant="h4">
-                            Transfer any photo into Chinese Ink paint style.
+                            <small>Transfer any photo into Chinese Ink paint style</small>
                         </Typography>
+                        <h4 className={classes.by}>by Tianyu Jiang</h4>
                     </Box>
                 </Grid>
             </AppBar>
+
             <Form>
             </Form>
 
