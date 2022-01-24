@@ -113,10 +113,10 @@ export default function Form(props) {
     React.useEffect(() => {
         const timer = setInterval(() => {
             setProgress((oldProgress) => {
-                if (oldProgress > 1 && oldProgress < 90) {
+                if (oldProgress >= 10 && oldProgress < 90) {
                     setProgress(oldProgress + 1);
                 }
-                else if (oldProgress < 99) {
+                else if (oldProgress >= 10 && oldProgress < 99) {
                     setProgress(oldProgress + 0.1);
                 }
             });
@@ -143,7 +143,7 @@ export default function Form(props) {
         setOpen(false);
         setLoading(true);
 
-        setProgress(5);
+        setProgress(10);
 
         setTimeout(() => {
             setRst(source);
@@ -228,7 +228,7 @@ export default function Form(props) {
 
                 <Grid item xs="6">
                     <LoadingOverlay active={loading} spinner
-                        text='Transfering... May take upto 10 seconds\nImage larger than 1920*1080 may take even longer time.'>
+                        text="Transfering... May take upto 10 seconds. Image larger than 1920*1080 may take even longer time.">
 
                         <img src={rst} className={classes.img} />
                     </LoadingOverlay>
