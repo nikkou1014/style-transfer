@@ -116,7 +116,7 @@ export default function Form(props) {
                 if (oldProgress > 1 && oldProgress < 90) {
                     setProgress(oldProgress + 1);
                 }
-                else if (oldProgress > 90 && oldProgress < 99) {
+                else if (oldProgress < 99) {
                     setProgress(oldProgress + 0.1);
                 }
             });
