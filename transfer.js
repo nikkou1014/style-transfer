@@ -34,7 +34,7 @@ let tensor2base64 = async (tensor, callback) => {
 };
 
 function style_img(file, res, next) {
-    let input = tf.node.decodeImage(file.buffer, 3);
+    let input = tf.node.decodeImage(file.buffer);
 
     // limit max size to max_size
     const max_size = 1280;

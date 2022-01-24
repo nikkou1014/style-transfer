@@ -23,7 +23,7 @@ function Alert(props) {
 }
 
 function AutoProgress(props) {
-    if (props.value > 0)
+    if (props.value > 0) {
         return (
             <Grid container spacing={3} justifyContent="center" alignItems="center">
                 <Grid item xs="3">
@@ -32,7 +32,9 @@ function AutoProgress(props) {
                 <Grid item xs="9">
                     <LinearProgress variant="determinate" value={props.value} />
                 </Grid>
-            </Grid>);
+            </Grid>
+        );
+    }
 
     return null;
 }
@@ -164,17 +166,18 @@ export default function Form(props) {
             .then(function (response) {
                 // console.log(response.data);
                 setProgress(100);
-
-                setRst(response.data);
-
+                setTimeout(() => {
+                    setProgress(0);
+                }, 400);
                 setLoading(false);
                 setOpen(true);
+
+                setRst(response.data);
             })
             .catch(function (error) {
                 console.log(error);
 
                 setProgress(0);
-
                 setLoading(false);
                 setFailed(true);
             });
@@ -217,19 +220,19 @@ export default function Form(props) {
                     </StyledButton>
                 </Grid>
 
+                <AutoProgress value={progress} />
+
                 <Grid item xs="6">
                     <img src={source} className={classes.img} />
                 </Grid>
 
                 <Grid item xs="6">
                     <LoadingOverlay active={loading} spinner
-                        text='Transfering... May take upto 10 seconds'>
+                        text='Transfering... May take upto 10 seconds\nImage larger than 1920*1080 may take even longer time.'>
 
                         <img src={rst} className={classes.img} />
                     </LoadingOverlay>
                 </Grid>
-
-                <AutoProgress value={progress} />
             </Grid>
 
             <Snackbar open={open} autoHideDuration={4000} onClose={() => { setOpen(false) }} anchorOrigin={{
